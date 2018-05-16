@@ -5,10 +5,19 @@ export const loginRouter = {
     path: '/login',
     name: 'login',
     meta: {
-        title: 'Login - 登录'
+        title: '登录'
     },
     component: () => import('@/views/login.vue')
 };
+
+// export const registerRouter = {
+//     path: '/register',
+//     name: 'login',
+//     meta: {
+//         title: '注册',
+//     },
+//     component: () => import('@/views/register.vue')
+// };
 
 export const page404 = {
     path: '/*',
@@ -234,6 +243,7 @@ export const appRouter = [
 // 所有上面定义的路由都要写在下面的routers里
 export const routers = [
     loginRouter,
+    // registerRouter,
     otherRouter,
     preview,
     locking,
