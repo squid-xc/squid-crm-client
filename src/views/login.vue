@@ -12,8 +12,8 @@
                 </p>
                 <div class="form-con">
                     <Form ref="loginForm" :model="form" :rules="rules">
-                        <FormItem prop="userName">
-                            <Input v-model="form.userName" placeholder="请输入用户名">
+                        <FormItem prop="phone">
+                            <Input v-model="form.phone" placeholder="请输入手机号码">
                                 <span slot="prepend">
                                     <Icon :size="16" type="person"></Icon>
                                 </span>
@@ -31,7 +31,7 @@
                         </FormItem>
                     </Form>
                     <!--<p class="login-tip">没有账号,去注册?</p>-->
-                    <router-link to="/home">没有账号,去注册?</router-link>
+                    <router-link to="/register">没有账号,去注册?</router-link>
                 </div>
             </Card>
         </div>
@@ -46,12 +46,12 @@ export default {
     data () {
         return {
             form: {
-                userName: 'iview_admin',
+                phone: '15757176646',
                 password: ''
             },
             rules: {
-                userName: [
-                    { required: true, message: '账号不能为空', trigger: 'blur' }
+                phone: [
+                    { required: true, message: '手机号码不能为空', trigger: 'blur' }
                 ],
                 password: [
                     { required: true, message: '密码不能为空', trigger: 'blur' }
@@ -64,34 +64,27 @@ export default {
             this.$refs.loginForm.validate((valid) => {
                 if (valid) {
                     let loginParams = {
-                        phone: this.form.userName,
+                        phone: this.form.phone,
                         password: this.form.password
                     };
+                    let _this = this;
 
-                    let res = login(loginParams);
-                    console.log(res.data);
-                    console.log(res);
-                    return false;
-                    let code = res.code;
-                    let msg = res.msg;
-                    let data = res.data;
-                    if(code == 200){
-
-                    }else{
-                        alert(msg);
-                    }
-                    return false;
-                    // Cookies.set('user', this.form.userName);
-                    // Cookies.set('password', this.form.password);
-                    // this.$store.commit('setAvator', 'https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=3448484253,3685836170&fm=27&gp=0.jpg');
-
-                    if (this.form.userName === 'iview_admin') {
-                        Cookies.set('access', 0);
-                    } else {
-                        Cookies.set('access', 1);
-                    }
-                    this.$router.push({
-                        name: 'home_index'
+                    login(loginParams).then(function (res) {
+                        res = res.data;
+                        let { msg, code, data } = res;
+                        if (code === 200) {
+                            let user = data;
+                            Cookies.set('user', user.name);
+                            Cookies.set('stuff_id', user.id);
+                            _this.$store.commit('setAvator', user.avatar);
+                            Cookies.set('access', 0);
+                            _this.$router.push({
+                                name: 'home_index'
+                            });
+                        } else {
+                            Cookies.set('access', 1);
+                            alert(msg);
+                        }
                     });
                 }
             });

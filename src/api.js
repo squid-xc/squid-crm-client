@@ -6,4 +6,4 @@ let base = '/api';
 export const login = params => { return axios.post(base + '/user/login', params); };
 
 // 注册
-export const register = params => { return axios.post(base + '/user/login', params); };
+export const register = params => { return axios.post(base + '/user/register', params); };
